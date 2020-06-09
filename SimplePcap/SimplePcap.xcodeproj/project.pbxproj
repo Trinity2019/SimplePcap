@@ -14,6 +14,8 @@
 		8A8152F1248F2CBD00F06C75 /* FilterPacketProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A8152F0248F2CBD00F06C75 /* FilterPacketProvider.m */; };
 		8A8152F3248F2CBD00F06C75 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A8152F2248F2CBD00F06C75 /* main.m */; };
 		8A8152F8248F2CBD00F06C75 /* Demo.SimplePcap.SimplePcapExtension.systemextension in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 8A8152EA248F2CBD00F06C75 /* Demo.SimplePcap.SimplePcapExtension.systemextension */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8AF2F181248F3F3600308B9F /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF2F17F248F3F3600308B9F /* MainWindowController.swift */; };
+		8AF2F182248F3F3600308B9F /* MainWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF2F180248F3F3600308B9F /* MainWindowController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,8 @@
 		8A8152F2248F2CBD00F06C75 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8A8152F4248F2CBD00F06C75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A8152F5248F2CBD00F06C75 /* SimplePcapExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimplePcapExtension.entitlements; sourceTree = "<group>"; };
+		8AF2F17F248F3F3600308B9F /* MainWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
+		8AF2F180248F3F3600308B9F /* MainWindowController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindowController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +106,8 @@
 				8A35BCBF248F258F00FF13BD /* MainMenu.xib */,
 				8A35BCC2248F258F00FF13BD /* Info.plist */,
 				8A35BCC3248F258F00FF13BD /* SimplePcap.entitlements */,
+				8AF2F17F248F3F3600308B9F /* MainWindowController.swift */,
+				8AF2F180248F3F3600308B9F /* MainWindowController.xib */,
 			);
 			path = SimplePcap;
 			sourceTree = "<group>";
@@ -208,6 +214,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A35BCBE248F258F00FF13BD /* Assets.xcassets in Resources */,
+				8AF2F182248F3F3600308B9F /* MainWindowController.xib in Resources */,
 				8A35BCC1248F258F00FF13BD /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -226,6 +233,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AF2F181248F3F3600308B9F /* MainWindowController.swift in Sources */,
 				8A35BCBC248F258D00FF13BD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
