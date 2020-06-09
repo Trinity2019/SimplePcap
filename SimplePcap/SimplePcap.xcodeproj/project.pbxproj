@@ -10,7 +10,35 @@
 		8A35BCBC248F258D00FF13BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A35BCBB248F258D00FF13BD /* AppDelegate.swift */; };
 		8A35BCBE248F258F00FF13BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A35BCBD248F258F00FF13BD /* Assets.xcassets */; };
 		8A35BCC1248F258F00FF13BD /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A35BCBF248F258F00FF13BD /* MainMenu.xib */; };
+		8A8152ED248F2CBD00F06C75 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A8152EC248F2CBD00F06C75 /* NetworkExtension.framework */; };
+		8A8152F1248F2CBD00F06C75 /* FilterPacketProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A8152F0248F2CBD00F06C75 /* FilterPacketProvider.m */; };
+		8A8152F3248F2CBD00F06C75 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A8152F2248F2CBD00F06C75 /* main.m */; };
+		8A8152F8248F2CBD00F06C75 /* Demo.SimplePcap.SimplePcapExtension.systemextension in Embed System Extensions */ = {isa = PBXBuildFile; fileRef = 8A8152EA248F2CBD00F06C75 /* Demo.SimplePcap.SimplePcapExtension.systemextension */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8A8152F6248F2CBD00F06C75 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A35BCB0248F258D00FF13BD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8A8152E9248F2CBD00F06C75;
+			remoteInfo = SimplePcapExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8A8152F9248F2CBD00F06C75 /* Embed System Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(SYSTEM_EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+				8A8152F8248F2CBD00F06C75 /* Demo.SimplePcap.SimplePcapExtension.systemextension in Embed System Extensions */,
+			);
+			name = "Embed System Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		8A35BCB8248F258D00FF13BD /* SimplePcap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimplePcap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -19,6 +47,13 @@
 		8A35BCC0248F258F00FF13BD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		8A35BCC2248F258F00FF13BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A35BCC3248F258F00FF13BD /* SimplePcap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimplePcap.entitlements; sourceTree = "<group>"; };
+		8A8152EA248F2CBD00F06C75 /* Demo.SimplePcap.SimplePcapExtension.systemextension */ = {isa = PBXFileReference; explicitFileType = "wrapper.system-extension"; includeInIndex = 0; path = Demo.SimplePcap.SimplePcapExtension.systemextension; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A8152EC248F2CBD00F06C75 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
+		8A8152EF248F2CBD00F06C75 /* FilterPacketProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterPacketProvider.h; sourceTree = "<group>"; };
+		8A8152F0248F2CBD00F06C75 /* FilterPacketProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FilterPacketProvider.m; sourceTree = "<group>"; };
+		8A8152F2248F2CBD00F06C75 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8A8152F4248F2CBD00F06C75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A8152F5248F2CBD00F06C75 /* SimplePcapExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SimplePcapExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +64,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8A8152E7248F2CBD00F06C75 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A8152ED248F2CBD00F06C75 /* NetworkExtension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -36,6 +79,8 @@
 			isa = PBXGroup;
 			children = (
 				8A35BCBA248F258D00FF13BD /* SimplePcap */,
+				8A8152EE248F2CBD00F06C75 /* SimplePcapExtension */,
+				8A8152EB248F2CBD00F06C75 /* Frameworks */,
 				8A35BCB9248F258D00FF13BD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -44,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				8A35BCB8248F258D00FF13BD /* SimplePcap.app */,
+				8A8152EA248F2CBD00F06C75 /* Demo.SimplePcap.SimplePcapExtension.systemextension */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -60,6 +106,26 @@
 			path = SimplePcap;
 			sourceTree = "<group>";
 		};
+		8A8152EB248F2CBD00F06C75 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8A8152EC248F2CBD00F06C75 /* NetworkExtension.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8A8152EE248F2CBD00F06C75 /* SimplePcapExtension */ = {
+			isa = PBXGroup;
+			children = (
+				8A8152EF248F2CBD00F06C75 /* FilterPacketProvider.h */,
+				8A8152F0248F2CBD00F06C75 /* FilterPacketProvider.m */,
+				8A8152F2248F2CBD00F06C75 /* main.m */,
+				8A8152F4248F2CBD00F06C75 /* Info.plist */,
+				8A8152F5248F2CBD00F06C75 /* SimplePcapExtension.entitlements */,
+			);
+			path = SimplePcapExtension;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -70,15 +136,34 @@
 				8A35BCB4248F258D00FF13BD /* Sources */,
 				8A35BCB5248F258D00FF13BD /* Frameworks */,
 				8A35BCB6248F258D00FF13BD /* Resources */,
+				8A8152F9248F2CBD00F06C75 /* Embed System Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8A8152F7248F2CBD00F06C75 /* PBXTargetDependency */,
 			);
 			name = SimplePcap;
 			productName = SimplePcap;
 			productReference = 8A35BCB8248F258D00FF13BD /* SimplePcap.app */;
 			productType = "com.apple.product-type.application";
+		};
+		8A8152E9248F2CBD00F06C75 /* SimplePcapExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A8152FC248F2CBD00F06C75 /* Build configuration list for PBXNativeTarget "SimplePcapExtension" */;
+			buildPhases = (
+				8A8152E6248F2CBD00F06C75 /* Sources */,
+				8A8152E7248F2CBD00F06C75 /* Frameworks */,
+				8A8152E8248F2CBD00F06C75 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SimplePcapExtension;
+			productName = SimplePcapExtension;
+			productReference = 8A8152EA248F2CBD00F06C75 /* Demo.SimplePcap.SimplePcapExtension.systemextension */;
+			productType = "com.apple.product-type.system-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -91,6 +176,9 @@
 				ORGANIZATIONNAME = Demo;
 				TargetAttributes = {
 					8A35BCB7248F258D00FF13BD = {
+						CreatedOnToolsVersion = 11.4.1;
+					};
+					8A8152E9248F2CBD00F06C75 = {
 						CreatedOnToolsVersion = 11.4.1;
 					};
 				};
@@ -109,6 +197,7 @@
 			projectRoot = "";
 			targets = (
 				8A35BCB7248F258D00FF13BD /* SimplePcap */,
+				8A8152E9248F2CBD00F06C75 /* SimplePcapExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -123,6 +212,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8A8152E8248F2CBD00F06C75 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -134,7 +230,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8A8152E6248F2CBD00F06C75 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A8152F3248F2CBD00F06C75 /* main.m in Sources */,
+				8A8152F1248F2CBD00F06C75 /* FilterPacketProvider.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8A8152F7248F2CBD00F06C75 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8A8152E9248F2CBD00F06C75 /* SimplePcapExtension */;
+			targetProxy = 8A8152F6248F2CBD00F06C75 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		8A35BCBF248F258F00FF13BD /* MainMenu.xib */ = {
@@ -297,6 +410,42 @@
 			};
 			name = Release;
 		};
+		8A8152FA248F2CBD00F06C75 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SimplePcapExtension/SimplePcapExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SimplePcapExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = Demo.SimplePcap.SimplePcapExtension;
+				PRODUCT_NAME = "$(inherited)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		8A8152FB248F2CBD00F06C75 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = SimplePcapExtension/SimplePcapExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SimplePcapExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				PRODUCT_BUNDLE_IDENTIFIER = Demo.SimplePcap.SimplePcapExtension;
+				PRODUCT_NAME = "$(inherited)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -314,6 +463,15 @@
 			buildConfigurations = (
 				8A35BCC7248F258F00FF13BD /* Debug */,
 				8A35BCC8248F258F00FF13BD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A8152FC248F2CBD00F06C75 /* Build configuration list for PBXNativeTarget "SimplePcapExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A8152FA248F2CBD00F06C75 /* Debug */,
+				8A8152FB248F2CBD00F06C75 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
