@@ -81,7 +81,6 @@ class MainWindowController: NSWindowController {
 
         loadFilterConfiguration { success in
             guard success else {
-                self.status = .running
                 return
             }
 
