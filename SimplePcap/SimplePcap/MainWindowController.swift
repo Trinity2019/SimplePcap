@@ -17,6 +17,29 @@ class MainWindowController: NSWindowController {
     @IBOutlet weak var startButton: NSButton!
     @IBOutlet weak var stopButton: NSButton!
     
+    enum Status {
+        case stopped
+        case indeterminate
+        case running
+    }
+    
+    var status: Status = .stopped {
+        didSet {
+            // Update the UI to reflect the new status
+            switch status {
+                case .stopped:
+                    stopButton.isHidden = true
+                    startButton.isHidden = false
+                case .indeterminate:
+                    stopButton.isHidden = true
+                    startButton.isHidden = true
+                case .running:
+                    stopButton.isHidden = false
+                    startButton.isHidden = true
+            }
+        }
+    }
+    
     lazy var extensionBundle: Bundle = {
 
         let extensionsDirectoryURL = URL(fileURLWithPath: "Contents/Library/SystemExtensions", relativeTo: Bundle.main.bundleURL)
@@ -48,16 +71,17 @@ class MainWindowController: NSWindowController {
         super.windowDidLoad()
 
         // Implement this method to handle any initialization after your window controller's window has been loaded from its nib file.
+        status = .stopped
     }
     
     // UI events handler
     @IBAction func startFilter(sender: AnyObject) {
         // Tell the text field what to display
-        startButton.isHidden = true;
-        stopButton.isHidden = false;
+        status = .indeterminate
         textField.stringValue = "Start button clicked"
         
         guard let extensionIdentifier = extensionBundle.bundleIdentifier else {
+            self.status = .stopped
             return
         }
 
@@ -70,17 +94,18 @@ class MainWindowController: NSWindowController {
     @IBAction func stopFilter(sender: AnyObject) {
         // Tell the text field what to display
         textField.stringValue = "Stop button clicked"
-        startButton.isHidden = false;
-        stopButton.isHidden = true;
+        status = .indeterminate
         
         let filterManager = NEFilterManager.shared()
 
         guard filterManager.isEnabled else {
+            status = .stopped
             return
         }
 
         loadFilterConfiguration { success in
             guard success else {
+                self.status = .running
                 return
             }
 
@@ -90,9 +115,11 @@ class MainWindowController: NSWindowController {
                 DispatchQueue.main.async {
                     if let error = saveError {
                         os_log("Failed to disable the filter configuration: %@", error.localizedDescription)
+                        self.status = .running
                         return
                     }
 
+                    self.status = .stopped
                 }
             }
         }
@@ -125,10 +152,10 @@ class MainWindowController: NSWindowController {
 
         loadFilterConfiguration { success in
 
-//            guard success else {
-//                self.status = .stopped
-//                return
-//            }
+            guard success else {
+                self.status = .stopped
+                return
+            }
 
             if filterManager.providerConfiguration == nil {
                 let providerConfiguration = NEFilterProviderConfiguration()
@@ -147,12 +174,14 @@ class MainWindowController: NSWindowController {
                 DispatchQueue.main.async {
                     if let error = saveError {
                         os_log("Failed to save the filter configuration: %@", error.localizedDescription)
+                        self.status = .stopped
                         return
                     }
                     os_log("BBBBBBBBBBB")
                     //self.registerWithProvider()
                 }
             }
+            self.status = .running
         }
     }
     
@@ -166,6 +195,7 @@ extension MainWindowController: OSSystemExtensionRequestDelegate {
 
         guard result == .completed else {
             os_log("Unexpected result %d for system extension request", result.rawValue)
+            status = .stopped
             return
         }
 
@@ -175,6 +205,8 @@ extension MainWindowController: OSSystemExtensionRequestDelegate {
     func request(_ request: OSSystemExtensionRequest, didFailWithError error: Error) {
 
         os_log("System extension request failed: %@", error.localizedDescription)
+        status = .stopped
+
     }
 
     func requestNeedsUserApproval(_ request: OSSystemExtensionRequest) {
