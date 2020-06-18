@@ -166,7 +166,6 @@ class MainWindowController: NSWindowController {
                     filterManager.localizedDescription = appName
                 }
             }
-            os_log("AAAAAAAAAAA")
 
             filterManager.isEnabled = true
 
@@ -177,7 +176,6 @@ class MainWindowController: NSWindowController {
                         self.status = .stopped
                         return
                     }
-                    os_log("BBBBBBBBBBB")
                     //self.registerWithProvider()
                 }
             }
