@@ -79,6 +79,10 @@ class MainWindowController: NSWindowController {
         // Tell the text field what to display
         status = .indeterminate
         textField.stringValue = "Start button clicked"
+        guard !NEFilterManager.shared().isEnabled else {
+            registerWithProvider()
+            return
+        }
         
         guard let extensionIdentifier = extensionBundle.bundleIdentifier else {
             self.status = .stopped
@@ -183,6 +187,15 @@ class MainWindowController: NSWindowController {
         }
     }
     
+    func registerWithProvider() {
+
+        IPCConnection.shared().register(withExtension: extensionBundle, withDelegate: self) { success in
+            DispatchQueue.main.async {
+                self.status = (success ? .running : .stopped)
+            }
+        }
+    }
+
 }
 
 extension MainWindowController: OSSystemExtensionRequestDelegate {
@@ -221,3 +234,10 @@ extension MainWindowController: OSSystemExtensionRequestDelegate {
     }
 }
 
+extension MainWindowController: AppCommunication {
+
+    func showPacket(withInterface interface: String, withPacketBytes packetBytes: Data, withCompletionHandler: @escaping (Bool) -> Void) {
+
+    }
+
+}

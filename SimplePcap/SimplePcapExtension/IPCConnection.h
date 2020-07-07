@@ -9,6 +9,8 @@
 #ifndef IPCConnection_h
 #define IPCConnection_h
 
+#import <Foundation/Foundation.h>
+
 /// SimplePcap app --> SimplePcapExtension communication
 @protocol ProviderCommunication<NSObject>
 
@@ -36,10 +38,12 @@
 
 + (IPCConnection *_Nonnull)shared;
 
+- (void)startListener;
+
 - (NSString *_Nullable)extensionMachServiceNameFromBundle:(NSBundle *_Nonnull)bundle;
 
 /// This method is called by SimplePcap app to register with the IPC provider running in the system extension.
-- (void)registerWithBundle:(NSBundle *_Nonnull)bundle
+- (void)registerWithExtension:(NSBundle *_Nonnull)bundle
               withDelegate:(NSObject<AppCommunication> *_Nonnull)delegate
      withCompletionHandler:(void (^_Nonnull)(bool success))completionHandler;
 

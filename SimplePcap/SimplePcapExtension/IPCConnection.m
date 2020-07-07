@@ -54,9 +54,9 @@ static IPCConnection *_sharedInstance;
     }
 }
 
-- (void)registerWithBundle:(NSBundle *)bundle
-              withDelegate:(NSObject<AppCommunication> *)delegate
-     withCompletionHandler:(void (^)(bool success))completionHandler
+- (void)registerWithExtension:(NSBundle *)bundle
+                 withDelegate:(NSObject<AppCommunication> *)delegate
+        withCompletionHandler:(void (^)(bool success))completionHandler
 {
     self.delegate = delegate;
 
