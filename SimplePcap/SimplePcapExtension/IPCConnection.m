@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "IPCConnection.h"
 
+NSString *myPcapFileName = @"/tmp/mySimplePcap.pcap";
+
 @implementation IPCConnection
 
 static IPCConnection *_sharedInstance;
@@ -139,6 +141,7 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
 {
     if (nil == self.currentConnection)
     {
+        reply(false);
         return;
     }
 
@@ -149,12 +152,64 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
             reply(false);
         }];
 
+    if (nil == appProxy)
+    {
+        reply(false);
+        return;
+    }
+    
+    // For simplicity, only send a small part of packet info for display on the UI
+    uint8_t *p = (uint8_t *)[packetBytes bytes];
+    NSMutableString *pktInfoString = [NSMutableString stringWithFormat:@"%@: ", interface];
+    size_t len = 32;
+    bool bAppend = true;
+    if (len > packetLength)
+    {
+        len = packetLength;
+        bAppend = false;
+    }
+
+    for (int i = 0; i < len; i++)
+    {
+        NSString *digit = [NSString stringWithFormat:@"%02x ", *p];
+        [pktInfoString appendString:digit];
+
+        p++;
+    }
+    
+    if (bAppend)
+    {
+        [pktInfoString appendString:@"...\n"];
+    }
+    else
+    {
+        [pktInfoString appendString:@"\n"];
+    }
+    
+    [appProxy showPacketInfoWithInfo:pktInfoString
+                          withLength:packetLength
+                   completionHandler:reply];
+}
+
+- (void)sendTextMessageToAppWithMessage:(NSString *_Nonnull)message
+                   withCompletionHandler:(void (^_Nonnull)(bool success))reply
+{
+    if (nil == self.currentConnection)
+    {
+        return;
+    }
+
+    NSObject<AppCommunication> *appProxy =
+        [self.currentConnection remoteObjectProxyWithErrorHandler:^(NSError *_Nonnull error) {
+            NSLog(@"Failed to send message to app, err: %@", [error localizedDescription]);
+            self.currentConnection = nil;
+            reply(false);
+        }];
+
     if (nil != appProxy)
     {
-        [appProxy showPacketWithInterface:interface
-                          withPacketBytes:packetBytes
-                               withLength:packetLength
-                        completionHandler:reply];
+        [appProxy showTextMessageWithMessage:message
+                           completionHandler:reply];
     }
 }
 

@@ -48,11 +48,15 @@ typedef struct pcaprec_hdr_s {
     databuffer = [NSData dataWithBytes: &pcapHeader length: (sizeof pcapHeader)];
     filemgr = [NSFileManager defaultManager];
 
-    res = [filemgr createFileAtPath: @"/tmp/mytest.pcap" contents: databuffer attributes: nil];
+    res = [filemgr createFileAtPath: myPcapFileName contents: databuffer attributes: nil];
     if (NO == res)
     {
-        NSLog(@"Failed to create pcap file");
+        NSString *msg = [NSString stringWithFormat:@"Failed to create pcap file: %@", myPcapFileName];
+        NSLog(@"%@", msg);
+        [[IPCConnection shared] sendTextMessageToAppWithMessage:msg
+                                          withCompletionHandler:^(bool success) {}];
     }
+    NSLog(@"(sizeof pcapHeader) = %lu", (sizeof pcapHeader));
     // end pcap initialization
 
     NSLog(@"startFilterWithCompletionHandler");
@@ -102,7 +106,7 @@ typedef struct pcaprec_hdr_s {
     data = [NSMutableData dataWithBytes: &pktHeader length: sizeof(pktHeader)];
     [data appendBytes: packetBytes length: packetLength];
 
-    file = [NSFileHandle fileHandleForUpdatingAtPath: @"/tmp/mytest.pcap"];
+    file = [NSFileHandle fileHandleForUpdatingAtPath: myPcapFileName];
 
     if (file != nil)
     {
@@ -115,9 +119,11 @@ typedef struct pcaprec_hdr_s {
     else
     {
         NSLog(@"Failed to open file");
+        [[IPCConnection shared] sendTextMessageToAppWithMessage:@"Failed to open file"
+                                          withCompletionHandler:^(bool success) {}];
     }
     // end write pcap
-    
+
     [[IPCConnection shared] sendPacketToAppWithInterface:interfaceName
                                          withPacketBytes:data
                                               withLength:packetLength
@@ -127,6 +133,7 @@ typedef struct pcaprec_hdr_s {
                                          NSLog(@"Unable to send packet to app.");
                                      }
                                  }];
+
 }
 
 @end

@@ -16,14 +16,21 @@ class MainWindowController: NSWindowController {
     @IBOutlet weak var textField: NSTextField!
     @IBOutlet weak var startButton: NSButton!
     @IBOutlet weak var stopButton: NSButton!
+    @IBOutlet var logTextView: NSTextView!
 
-    var nLines: Int = 0
+    var nSize: Int = 24
     
     enum Status {
         case stopped
         case indeterminate
         case running
     }
+    
+    lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss "
+        return formatter
+    }()
     
     var status: Status = .stopped {
         didSet {
@@ -40,7 +47,7 @@ class MainWindowController: NSWindowController {
                 case .running:
                     stopButton.isHidden = false
                     startButton.isHidden = true
-                    textField.stringValue = "network extension is running"
+                    textField.stringValue = "saving packets to " + myPcapFileName
             }
         }
     }
@@ -242,22 +249,33 @@ extension MainWindowController: OSSystemExtensionRequestDelegate {
 
 extension MainWindowController: AppCommunication {
 
-    func showPacket(withInterface interface: String,
-                    withPacketBytes packetBytes: Data,
-                    withLength length: size_t,
-                    completionHandler: @escaping (Bool) -> Void) {
+    func showPacketInfo(withInfo pktInfo: String,
+                        withLength length: size_t,
+                        completionHandler: @escaping (Bool) -> Void) {
 
-        if (nLines > 13)
-        {
-            nLines = 0
-            textField.stringValue = ""
+        guard let font = NSFont.userFixedPitchFont(ofSize: 12.0) else {
+            completionHandler(false)
+            return
         }
-        var oldText = textField.stringValue + "\n"
-        nLines += 1
         
-        oldText += interface + ": "
-        oldText += packetBytes.base64EncodedString()
-        textField.stringValue = oldText
-        completionHandler(true);
+        let connectionDate = Date()
+        let dateString = dateFormatter.string(from: connectionDate)
+
+        let logAttributes: [NSAttributedString.Key: Any] = [ .font: font, .foregroundColor: NSColor.textColor ]
+        let attributedString = NSAttributedString(string: dateString + pktInfo, attributes: logAttributes)
+        logTextView.textStorage?.append(attributedString)
+        nSize += length
+        let message = "saving packets to " + myPcapFileName + "(current size = " + String(nSize) + ")"
+        textField.stringValue = message
+        
+        completionHandler(true)
+    }
+    
+    func showTextMessage(withMessage message: String,
+                           completionHandler: @escaping (Bool) -> Void) {
+
+        textField.stringValue = message
+        
+        completionHandler(true)
     }
 }

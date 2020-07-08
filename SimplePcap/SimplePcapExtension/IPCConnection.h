@@ -21,11 +21,13 @@
 /// SimplePcapExtension --> SimplePcap app communication
 @protocol AppCommunication<NSObject>
 
-- (void)showPacketWithInterface:(NSString *_Nonnull)interface
-                withPacketBytes:(NSData * _Nonnull)packetBytes
-                     withLength:(const size_t)packetLength
-              completionHandler:(void (^_Nonnull)(bool success))reply;
+// This method shows the information about a packet on the UI
+- (void)showPacketInfoWithInfo:(NSString *_Nonnull)pktInfo
+                    withLength:(const size_t)packetLength
+             completionHandler:(void (^_Nonnull)(bool success))reply;
 
+- (void)showTextMessageWithMessage:(NSString *_Nonnull)message
+                 completionHandler:(void (^_Nonnull)(bool success))reply;
 @end
 
 /// IPCConnection class is shared by both SimplePcap app and SimplePcapExtension to communicate with each other
@@ -56,6 +58,11 @@
                           withLength:(const size_t)packetLength
                withCompletionHandler:(void (^_Nonnull)(bool success))reply;
 
+- (void)sendTextMessageToAppWithMessage:(NSString *_Nonnull)message
+                  withCompletionHandler:(void (^_Nonnull)(bool success))reply;
+
 @end
+
+extern NSString * _Nonnull myPcapFileName;
 
 #endif /* IPCConnection_h */
