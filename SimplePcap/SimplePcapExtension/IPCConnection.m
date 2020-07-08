@@ -204,6 +204,7 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
                        completionHandler:reply];
 
         lastUpdateTime = timeSeconds;
+        NSLog(@"Update to pcap size = %lu", pcapSize);
     }
     
 }
