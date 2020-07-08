@@ -28,7 +28,6 @@
 
 - (void)showTextMessageWithMessage:(NSString *_Nonnull)message
                  completionHandler:(void (^_Nonnull)(bool success))reply;
-
 @end
 
 /// IPCConnection class is shared by both SimplePcap app and SimplePcapExtension to communicate with each other

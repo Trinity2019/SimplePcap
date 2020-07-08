@@ -9,8 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "IPCConnection.h"
 
+<<<<<<< HEAD
 NSString *myPcapFileName = @"/tmp/mySimplePcap.pcap";
 
+=======
+>>>>>>> b729a7d061df2a2811e42bbc0aaeed7061dbc5de
 @implementation IPCConnection
 
 static IPCConnection *_sharedInstance;
@@ -211,7 +214,6 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
         [appProxy showTextMessageWithMessage:message
                            completionHandler:reply];
     }
-    
 }
 
 @end
