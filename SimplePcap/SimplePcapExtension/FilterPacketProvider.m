@@ -56,7 +56,6 @@ typedef struct pcaprec_hdr_s {
         [[IPCConnection shared] sendTextMessageToAppWithMessage:msg
                                           withCompletionHandler:^(bool success) {}];
     }
-    NSLog(@"(sizeof pcapHeader) = %lu", (sizeof pcapHeader));
     // end pcap initialization
 
     NSLog(@"startFilterWithCompletionHandler");
@@ -125,7 +124,8 @@ typedef struct pcaprec_hdr_s {
     // end write pcap
 
     [[IPCConnection shared] sendPacketToAppWithInterface:interfaceName
-                                         withPacketBytes:data
+                                                withTime:tv.tv_sec
+                                         withPacketBytes:packetBytes
                                               withLength:packetLength
                                    withCompletionHandler:^(bool success) {
                                      if (!success)
