@@ -69,6 +69,7 @@ static IPCConnection *_sharedInstance;
 
     NSXPCConnectionOptions options = {0};
     NSString *machServiceName = [self extensionMachServiceNameFromBundle:bundle];
+
     NSXPCConnection *newConnection = [[NSXPCConnection alloc] initWithMachServiceName:machServiceName options:options];
 
     // The exported object is the delegate.
@@ -129,6 +130,32 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
 {
     NSLog(@"App registered");
     completionHandler(true);
+}
+
+- (void)sendPacketToAppWithInterface:(NSString *_Nonnull)interface
+                     withPacketBytes:(NSData * _Nonnull)packetBytes
+                          withLength:(const size_t)packetLength
+               withCompletionHandler:(void (^_Nonnull)(bool success))reply
+{
+    if (nil == self.currentConnection)
+    {
+        return;
+    }
+
+    NSObject<AppCommunication> *appProxy =
+        [self.currentConnection remoteObjectProxyWithErrorHandler:^(NSError *_Nonnull error) {
+            NSLog(@"Failed to send data to app, err: %@", [error localizedDescription]);
+            self.currentConnection = nil;
+            reply(false);
+        }];
+
+    if (nil != appProxy)
+    {
+        [appProxy showPacketWithInterface:interface
+                          withPacketBytes:packetBytes
+                               withLength:packetLength
+                        completionHandler:reply];
+    }
 }
 
 @end

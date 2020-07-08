@@ -8,6 +8,8 @@
 
 #include <sys/time.h>
 #import "FilterPacketProvider.h"
+#import "IPCConnection.h"
+
 typedef struct pcap_hdr_s {
         uint32_t magic_number;   /* magic number */
         uint16_t version_major;  /* major version number */
@@ -80,8 +82,8 @@ typedef struct pcaprec_hdr_s {
                    withRawBytes: (const void *_Nonnull) packetBytes
                          length: (const size_t) packetLength
 {
-    nw_interface_type_t nicType = nw_interface_get_type(interface);
-    NSLog(@"Got packet on interface %s, type = %u, index = %u, direction: %ld, length: %zu", nw_interface_get_name(interface), nicType, nw_interface_get_index(interface), direction, packetLength);
+    NSString *interfaceName = [NSString stringWithCString:nw_interface_get_name(interface)
+                                                 encoding:NSUTF8StringEncoding];
 
     // write pcap
     NSFileHandle *file;
@@ -109,14 +111,22 @@ typedef struct pcaprec_hdr_s {
         [file writeData: data];
 
         [file closeFile];
-
-        NSLog(@"Wrote %lu bytes to file.", packetLength);
     }
     else
     {
         NSLog(@"Failed to open file");
     }
     // end write pcap
+    
+    [[IPCConnection shared] sendPacketToAppWithInterface:interfaceName
+                                         withPacketBytes:data
+                                              withLength:packetLength
+                                   withCompletionHandler:^(bool success) {
+                                     if (!success)
+                                     {
+                                         NSLog(@"Unable to send packet to app.");
+                                     }
+                                 }];
 }
 
 @end

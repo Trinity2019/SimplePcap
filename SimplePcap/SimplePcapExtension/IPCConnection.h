@@ -23,7 +23,8 @@
 
 - (void)showPacketWithInterface:(NSString *_Nonnull)interface
                 withPacketBytes:(NSData * _Nonnull)packetBytes
-          withCompletionHandler:(void (^_Nonnull)(bool success))reply;
+                     withLength:(const size_t)packetLength
+              completionHandler:(void (^_Nonnull)(bool success))reply;
 
 @end
 
@@ -50,8 +51,10 @@
 - (BOOL)listener:(NSXPCListener *_Nonnull)listener
     shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection;
 
-/// This method implements protocol ProviderCommunication
-- (void)registerWithCompletionHandler:(void (^_Nonnull)(bool success))completionHandler;
+- (void)sendPacketToAppWithInterface:(NSString *_Nonnull)interface
+                     withPacketBytes:(NSData * _Nonnull)packetBytes
+                          withLength:(const size_t)packetLength
+               withCompletionHandler:(void (^_Nonnull)(bool success))reply;
 
 @end
 

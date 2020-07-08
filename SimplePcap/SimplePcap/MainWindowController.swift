@@ -16,6 +16,8 @@ class MainWindowController: NSWindowController {
     @IBOutlet weak var textField: NSTextField!
     @IBOutlet weak var startButton: NSButton!
     @IBOutlet weak var stopButton: NSButton!
+
+    var nLines: Int = 0
     
     enum Status {
         case stopped
@@ -30,12 +32,15 @@ class MainWindowController: NSWindowController {
                 case .stopped:
                     stopButton.isHidden = true
                     startButton.isHidden = false
+                    textField.stringValue = "network extension is not running"
                 case .indeterminate:
                     stopButton.isHidden = true
                     startButton.isHidden = true
+                    textField.stringValue = "network extension status is changing"
                 case .running:
                     stopButton.isHidden = false
                     startButton.isHidden = true
+                    textField.stringValue = "network extension is running"
             }
         }
     }
@@ -78,7 +83,7 @@ class MainWindowController: NSWindowController {
     @IBAction func startFilter(sender: AnyObject) {
         // Tell the text field what to display
         status = .indeterminate
-        textField.stringValue = "Start button clicked"
+        textField.stringValue = "Starting..."
         guard !NEFilterManager.shared().isEnabled else {
             registerWithProvider()
             return
@@ -150,7 +155,7 @@ class MainWindowController: NSWindowController {
         let filterManager = NEFilterManager.shared()
 
         guard !filterManager.isEnabled else {
-            //registerWithProvider()
+            registerWithProvider()
             return
         }
 
@@ -180,7 +185,8 @@ class MainWindowController: NSWindowController {
                         self.status = .stopped
                         return
                     }
-                    //self.registerWithProvider()
+
+                    self.registerWithProvider()
                 }
             }
             self.status = .running
@@ -222,7 +228,7 @@ extension MainWindowController: OSSystemExtensionRequestDelegate {
 
     func requestNeedsUserApproval(_ request: OSSystemExtensionRequest) {
 
-        os_log("Extension %@ requires user approval", request.identifier)
+        os_log("Extension %{public}@ requires user approval", request.identifier)
     }
 
     func request(_ request: OSSystemExtensionRequest,
@@ -236,8 +242,22 @@ extension MainWindowController: OSSystemExtensionRequestDelegate {
 
 extension MainWindowController: AppCommunication {
 
-    func showPacket(withInterface interface: String, withPacketBytes packetBytes: Data, withCompletionHandler: @escaping (Bool) -> Void) {
+    func showPacket(withInterface interface: String,
+                    withPacketBytes packetBytes: Data,
+                    withLength length: size_t,
+                    completionHandler: @escaping (Bool) -> Void) {
 
+        if (nLines > 13)
+        {
+            nLines = 0
+            textField.stringValue = ""
+        }
+        var oldText = textField.stringValue + "\n"
+        nLines += 1
+        
+        oldText += interface + ": "
+        oldText += packetBytes.base64EncodedString()
+        textField.stringValue = oldText
+        completionHandler(true);
     }
-
 }
