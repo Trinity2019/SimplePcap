@@ -11,6 +11,7 @@
 
 NSString *myPcapFileName = @"/tmp/mySimplePcap.pcap";
 long lastUpdateTime = 0;
+size_t pcapSize = 0;
 
 @implementation IPCConnection
 
@@ -132,8 +133,6 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
 - (void)registerWithCompletionHandler:(void (^_Nonnull)(bool success))completionHandler
 {
     NSLog(@"App registered");
-    self.pcapSize = 24;
-    self.lastUpdateTime = 0;
     completionHandler(true);
 }
 
@@ -143,8 +142,6 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
                           withLength:(const size_t)packetLength
                withCompletionHandler:(void (^_Nonnull)(bool success))reply
 {
-    self.pcapSize += packetLength;
-
     if (nil == self.currentConnection)
     {
         reply(false);
@@ -192,9 +189,9 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
         [pktInfoString appendString:@"\n"];
     }
     
-    if (timeSeconds - self.lastUpdateTime > 5) // limit update frequency
+    if (timeSeconds - lastUpdateTime > 5) // limit update frequency
     {
-        [appProxy showPcapSizeWithSize:self.pcapSize
+        [appProxy showPcapSizeWithSize:pcapSize
                      completionHandler:^(bool success) {
                          if (!success)
                          {
@@ -206,7 +203,7 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
         [appProxy showPacketInfoWithInfo:pktInfoString
                        completionHandler:reply];
 
-        self.lastUpdateTime = timeSeconds;
+        lastUpdateTime = timeSeconds;
     }
     
 }
@@ -231,19 +228,6 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
         [appProxy showTextMessageWithMessage:message
                            completionHandler:reply];
     }
-}
-
-- (id)init
-{
-    self = [super init];
-
-    if (self)
-    {
-        _pcapSize = 24;
-        _lastUpdateTime = 0;
-    }
-
-    return self;
 }
 
 @end

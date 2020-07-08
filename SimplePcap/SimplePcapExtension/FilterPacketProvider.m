@@ -27,6 +27,8 @@ typedef struct pcaprec_hdr_s {
         uint32_t orig_len;       /* actual length of packet */
 } pcaprec_hdr_t;
 
+extern size_t pcapSize;
+
 @implementation FilterPacketProvider
 
 - (void)startFilterWithCompletionHandler:(void (^)(NSError *error))completionHandler {
@@ -58,6 +60,7 @@ typedef struct pcaprec_hdr_s {
     }
     // end pcap initialization
 
+    pcapSize = sizeof(pcap_hdr_t);
     NSLog(@"startFilterWithCompletionHandler");
 
 	self.packetHandler = ^NEFilterPacketProviderVerdict(NEFilterPacketContext * _Nonnull context, nw_interface_t  _Nonnull interface, NETrafficDirection direction, const void * _Nonnull packetBytes, const size_t packetLength) {
@@ -121,6 +124,7 @@ typedef struct pcaprec_hdr_s {
         [[IPCConnection shared] sendTextMessageToAppWithMessage:@"Failed to open file"
                                           withCompletionHandler:^(bool success) {}];
     }
+    pcapSize += packetLength + sizeof(pcaprec_hdr_t);
     // end write pcap
 
     [[IPCConnection shared] sendPacketToAppWithInterface:interfaceName

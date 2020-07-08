@@ -41,9 +41,6 @@
 
 @property(nonatomic, weak) NSObject<AppCommunication> *_Nullable delegate;
 
-@property size_t pcapSize;
-@property time_t lastUpdateTime;
-
 + (IPCConnection *_Nonnull)shared;
 
 - (void)startListener;
