@@ -47,11 +47,7 @@ class MainWindowController: NSWindowController {
                 case .running:
                     stopButton.isHidden = false
                     startButton.isHidden = true
-<<<<<<< HEAD
                     textField.stringValue = "saving packets to " + myPcapFileName
-=======
-                    textField.stringValue = "network extension is running"
->>>>>>> b729a7d061df2a2811e42bbc0aaeed7061dbc5de
             }
         }
     }
