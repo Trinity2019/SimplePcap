@@ -197,6 +197,8 @@ class MainWindowController: NSWindowController {
                 }
             }
             self.status = .running
+            self.logTextView.string = ""
+            self.nLines = 0;
         }
     }
     
@@ -263,12 +265,9 @@ extension MainWindowController: AppCommunication {
         let logAttributes: [NSAttributedString.Key: Any] = [ .font: font, .foregroundColor: NSColor.textColor ]
         let attributedString = NSAttributedString(string: dateString + pktInfo, attributes: logAttributes)
         
-        if (10 == nLines)
+        if (30 == nLines)
         {
-            for  subview in self.logTextView.subviews
-            {
-                subview.removeFromSuperview()
-            }
+            logTextView.string = ""
             nLines = 0;
         }
 
@@ -288,7 +287,7 @@ extension MainWindowController: AppCommunication {
     
     func showPcapSize(withSize pcapSize: size_t,
                       completionHandler: @escaping (Bool) -> Void) {
-        let message = "saving packets to " + myPcapFileName + "(current size = " + String(pcapSize) + ")"
+        let message = "saving packets to " + myPcapFileName + "(current size = " + String(pcapSize) + " bytes)"
         textField.stringValue = message
         
         completionHandler(true)
