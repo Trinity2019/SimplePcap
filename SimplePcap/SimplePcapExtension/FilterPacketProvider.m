@@ -88,8 +88,13 @@ extern size_t pcapSize;
                    withRawBytes: (const void *_Nonnull) packetBytes
                          length: (const size_t) packetLength
 {
-    NSString *interfaceName = [NSString stringWithCString:nw_interface_get_name(interface)
-                                                 encoding:NSUTF8StringEncoding];
+    nw_interface_type_t nicType = nw_interface_get_type(interface);
+    
+    // Only capture Ether traffic for now
+    if ((nw_interface_type_wired != nicType) && (nw_interface_type_wifi != nicType))
+    {
+        return;
+    }
 
     // write pcap
     NSFileHandle *file;
@@ -126,6 +131,9 @@ extern size_t pcapSize;
     }
     pcapSize += packetLength + sizeof(pcaprec_hdr_t);
     // end write pcap
+
+    NSString *interfaceName = [NSString stringWithCString:nw_interface_get_name(interface)
+                                                 encoding:NSUTF8StringEncoding];
 
     [[IPCConnection shared] sendPacketToAppWithInterface:interfaceName
                                                 withTime:tv.tv_sec
