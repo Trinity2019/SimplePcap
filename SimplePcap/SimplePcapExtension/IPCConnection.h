@@ -56,7 +56,7 @@
     shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection;
 
 - (void)sendPacketToAppWithInterface:(NSString *_Nonnull)interface
-                            withTime:(long)timeSeconds
+                       withTimeStamp:(long)timeSeconds
                      withPacketBytes:(const void *_Nonnull)packetBytes
                           withLength:(const size_t)packetLength
                withCompletionHandler:(void (^_Nonnull)(bool success))reply;

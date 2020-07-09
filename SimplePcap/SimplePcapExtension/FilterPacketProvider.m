@@ -136,7 +136,7 @@ extern size_t pcapSize;
                                                  encoding:NSUTF8StringEncoding];
 
     [[IPCConnection shared] sendPacketToAppWithInterface:interfaceName
-                                                withTime:tv.tv_sec
+                                           withTimeStamp:tv.tv_sec
                                          withPacketBytes:packetBytes
                                               withLength:packetLength
                                    withCompletionHandler:^(bool success) {
