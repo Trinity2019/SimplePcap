@@ -27,6 +27,8 @@ typedef struct pcaprec_hdr_s {
         uint32_t orig_len;       /* actual length of packet */
 } pcaprec_hdr_t;
 
+extern size_t pcapSize;
+
 @implementation FilterPacketProvider
 
 - (void)startFilterWithCompletionHandler:(void (^)(NSError *error))completionHandler {
@@ -56,9 +58,9 @@ typedef struct pcaprec_hdr_s {
         [[IPCConnection shared] sendTextMessageToAppWithMessage:msg
                                           withCompletionHandler:^(bool success) {}];
     }
-    NSLog(@"(sizeof pcapHeader) = %lu", (sizeof pcapHeader));
     // end pcap initialization
 
+    pcapSize = sizeof(pcap_hdr_t);
     NSLog(@"startFilterWithCompletionHandler");
 
 	self.packetHandler = ^NEFilterPacketProviderVerdict(NEFilterPacketContext * _Nonnull context, nw_interface_t  _Nonnull interface, NETrafficDirection direction, const void * _Nonnull packetBytes, const size_t packetLength) {
@@ -86,8 +88,13 @@ typedef struct pcaprec_hdr_s {
                    withRawBytes: (const void *_Nonnull) packetBytes
                          length: (const size_t) packetLength
 {
-    NSString *interfaceName = [NSString stringWithCString:nw_interface_get_name(interface)
-                                                 encoding:NSUTF8StringEncoding];
+    nw_interface_type_t nicType = nw_interface_get_type(interface);
+    
+    // Only capture Ether traffic for now
+    if ((nw_interface_type_wired != nicType) && (nw_interface_type_wifi != nicType))
+    {
+        return;
+    }
 
     // write pcap
     NSFileHandle *file;
@@ -122,10 +129,15 @@ typedef struct pcaprec_hdr_s {
         [[IPCConnection shared] sendTextMessageToAppWithMessage:@"Failed to open file"
                                           withCompletionHandler:^(bool success) {}];
     }
+    pcapSize += packetLength + sizeof(pcaprec_hdr_t);
     // end write pcap
 
+    NSString *interfaceName = [NSString stringWithCString:nw_interface_get_name(interface)
+                                                 encoding:NSUTF8StringEncoding];
+
     [[IPCConnection shared] sendPacketToAppWithInterface:interfaceName
-                                         withPacketBytes:data
+                                           withTimeStamp:tv.tv_sec
+                                         withPacketBytes:packetBytes
                                               withLength:packetLength
                                    withCompletionHandler:^(bool success) {
                                      if (!success)

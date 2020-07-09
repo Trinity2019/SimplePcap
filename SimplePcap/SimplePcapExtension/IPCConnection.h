@@ -23,11 +23,13 @@
 
 // This method shows the information about a packet on the UI
 - (void)showPacketInfoWithInfo:(NSString *_Nonnull)pktInfo
-                    withLength:(const size_t)packetLength
              completionHandler:(void (^_Nonnull)(bool success))reply;
 
 - (void)showTextMessageWithMessage:(NSString *_Nonnull)message
                  completionHandler:(void (^_Nonnull)(bool success))reply;
+
+- (void)showPcapSizeWithSize:(const size_t)pcapSize
+           completionHandler:(void (^_Nonnull)(bool success))reply;
 @end
 
 /// IPCConnection class is shared by both SimplePcap app and SimplePcapExtension to communicate with each other
@@ -54,7 +56,8 @@
     shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection;
 
 - (void)sendPacketToAppWithInterface:(NSString *_Nonnull)interface
-                     withPacketBytes:(NSData * _Nonnull)packetBytes
+                       withTimeStamp:(long)timeSeconds
+                     withPacketBytes:(const void *_Nonnull)packetBytes
                           withLength:(const size_t)packetLength
                withCompletionHandler:(void (^_Nonnull)(bool success))reply;
 

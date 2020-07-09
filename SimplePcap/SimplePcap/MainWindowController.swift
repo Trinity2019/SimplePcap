@@ -17,8 +17,8 @@ class MainWindowController: NSWindowController {
     @IBOutlet weak var startButton: NSButton!
     @IBOutlet weak var stopButton: NSButton!
     @IBOutlet var logTextView: NSTextView!
-
-    var nSize: Int = 24
+    
+    var nLines:Int = 0
     
     enum Status {
         case stopped
@@ -197,6 +197,8 @@ class MainWindowController: NSWindowController {
                 }
             }
             self.status = .running
+            self.logTextView.string = ""
+            self.nLines = 0;
         }
     }
     
@@ -250,8 +252,7 @@ extension MainWindowController: OSSystemExtensionRequestDelegate {
 extension MainWindowController: AppCommunication {
 
     func showPacketInfo(withInfo pktInfo: String,
-                        withLength length: size_t,
-                        completionHandler: @escaping (Bool) -> Void) {
+                       completionHandler: @escaping (Bool) -> Void) {
 
         guard let font = NSFont.userFixedPitchFont(ofSize: 12.0) else {
             completionHandler(false)
@@ -263,17 +264,30 @@ extension MainWindowController: AppCommunication {
 
         let logAttributes: [NSAttributedString.Key: Any] = [ .font: font, .foregroundColor: NSColor.textColor ]
         let attributedString = NSAttributedString(string: dateString + pktInfo, attributes: logAttributes)
-        logTextView.textStorage?.append(attributedString)
-        nSize += length
-        let message = "saving packets to " + myPcapFileName + "(current size = " + String(nSize) + ")"
-        textField.stringValue = message
         
+        if (30 == nLines)
+        {
+            logTextView.string = ""
+            nLines = 0;
+        }
+
+        logTextView.textStorage?.append(attributedString)
+        nLines += 1
+
         completionHandler(true)
     }
     
     func showTextMessage(withMessage message: String,
                            completionHandler: @escaping (Bool) -> Void) {
 
+        textField.stringValue = message
+        
+        completionHandler(true)
+    }
+    
+    func showPcapSize(withSize pcapSize: size_t,
+                      completionHandler: @escaping (Bool) -> Void) {
+        let message = "saving packets to " + myPcapFileName + "(current size = " + String(pcapSize) + " bytes)"
         textField.stringValue = message
         
         completionHandler(true)

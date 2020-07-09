@@ -10,6 +10,8 @@
 #import "IPCConnection.h"
 
 NSString *myPcapFileName = @"/tmp/mySimplePcap.pcap";
+long lastUpdateTime = 0;
+size_t pcapSize = 0;
 
 @implementation IPCConnection
 
@@ -135,7 +137,8 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
 }
 
 - (void)sendPacketToAppWithInterface:(NSString *_Nonnull)interface
-                     withPacketBytes:(NSData * _Nonnull)packetBytes
+                       withTimeStamp:(long)timeSeconds
+                     withPacketBytes:(const void *_Nonnull)packetBytes
                           withLength:(const size_t)packetLength
                withCompletionHandler:(void (^_Nonnull)(bool success))reply
 {
@@ -159,7 +162,7 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
     }
     
     // For simplicity, only send a small part of packet info for display on the UI
-    uint8_t *p = (uint8_t *)[packetBytes bytes];
+    uint8_t *p = (uint8_t *)packetBytes;
     NSMutableString *pktInfoString = [NSMutableString stringWithFormat:@"%@: ", interface];
     size_t len = 32;
     bool bAppend = true;
@@ -186,9 +189,25 @@ shouldAcceptNewConnection:(NSXPCConnection *_Nonnull)newConnection
         [pktInfoString appendString:@"\n"];
     }
     
-    [appProxy showPacketInfoWithInfo:pktInfoString
-                          withLength:packetLength
-                   completionHandler:reply];
+    if (timeSeconds - lastUpdateTime > 5) // limit update frequency
+    {
+        [appProxy showPcapSizeWithSize:pcapSize
+                     completionHandler:^(bool success) {
+                         if (!success)
+                         {
+                             NSLog(@"Unable to update pcap size with app.");
+                         }
+                     }];
+
+        // So far I don't try to update every packet with the UI
+        [appProxy showPacketInfoWithInfo:pktInfoString
+                       completionHandler:reply];
+
+        lastUpdateTime = timeSeconds;
+
+        NSLog(@"Update to pcap size = %lu", pcapSize);
+    }
+    
 }
 
 - (void)sendTextMessageToAppWithMessage:(NSString *_Nonnull)message
