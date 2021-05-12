@@ -63,7 +63,7 @@ extern size_t pcapSize;
     pcapSize = sizeof(pcap_hdr_t);
     NSLog(@"startFilterWithCompletionHandler");
 
-	self.packetHandler = ^NEFilterPacketProviderVerdict(NEFilterPacketContext * _Nonnull context, nw_interface_t  _Nonnull interface, NETrafficDirection direction, const void * _Nonnull packetBytes, const size_t packetLength) {
+    self.packetHandler = ^NEFilterPacketProviderVerdict(NEFilterPacketContext * _Nonnull context, nw_interface_t  _Nonnull interface, NETrafficDirection direction, const void * _Nonnull packetBytes, const size_t packetLength) {
 
         (void)[FilterPacketProvider handlePacketwithContext: context
                                               fromInterface: interface
