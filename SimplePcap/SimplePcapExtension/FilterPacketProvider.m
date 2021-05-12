@@ -71,9 +71,9 @@ extern size_t pcapSize;
                                                withRawBytes: packetBytes
                                                      length: packetLength];
 
-		return NEFilterPacketProviderVerdictAllow;
-	};
-    
+        return NEFilterPacketProviderVerdictAllow;
+    };
+
     completionHandler(nil);
 }
 
